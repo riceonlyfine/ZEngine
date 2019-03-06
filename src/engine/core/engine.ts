@@ -20,7 +20,7 @@ namespace ZE{
         private _canvas : HTMLCanvasElement;
         private _shader : Shader;
         
-        private _bufffer : WebGLBuffer;
+        private _bufffer : GLBuffer;
 
         /**
          * create new engine.
@@ -60,16 +60,24 @@ namespace ZE{
         private loop(): void{
             gl.clear(gl.COLOR_BUFFER_BIT);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this._bufffer);
-            gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-            gl.enableVertexAttribArray(0);
-            gl.drawArrays(gl.TRIANGLES, 0, 3)
+            // Set unifroms.
+           let colorPosition = this._shader.getUniformLocation("u_color");
+            gl.uniform4f(colorPosition, 1, 0.5, 0, 1);
+
+            this._bufffer.bind();
+            this._bufffer.draw();
 
             requestAnimationFrame(this.loop.bind(this));
         }
 
         private createBuff() : void{
-            this._bufffer = gl.createBuffer();
+            this._bufffer = new GLBuffer(3);
+
+            let positionAttribute = new AttributeInfo();
+            positionAttribute.location = this._shader.getAttributeLocation("a_position");
+            positionAttribute.offset = 0;
+            positionAttribute.size = 3;
+            this._bufffer.addAttributeLocation(positionAttribute);
 
             let vertices = [
                 // x,y,z
@@ -77,14 +85,9 @@ namespace ZE{
                 0, 0.5, 0,
                 0.5, 0.5, 0,
             ];
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, this._bufffer);
-            gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-            gl.enableVertexAttribArray(0);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, undefined);
-            gl.disableVertexAttribArray(0);
+            this._bufffer.pushBackData(vertices);
+            this._bufffer.upload();
+            this._bufffer.unbind();
         }
 
         private loadShaders() : void{
@@ -96,8 +99,9 @@ namespace ZE{
 
             let fragmentSource = `
             precision mediump float;
+            uniform vec4 u_color;
             void main(){
-                gl_FragColor = vec4(1.0);
+                gl_FragColor = u_color;
             }`;
 
             this._shader = new Shader('basic', vertexSource, fragmentSource);
