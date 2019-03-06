@@ -19,6 +19,8 @@ namespace ZE{
 
         private _canvas : HTMLCanvasElement;
         private _shader : Shader;
+        
+        private _bufffer : WebGLBuffer;
 
         /**
          * create new engine.
@@ -38,7 +40,8 @@ namespace ZE{
             this.loadShaders();
             this._shader.use();
 
-
+            this.createBuff();
+            this.resize();
             this.loop();
         }
 
@@ -49,13 +52,39 @@ namespace ZE{
             if(this._canvas !== undefined){
                 this._canvas.width = window.innerWidth;
                 this._canvas.height = window.innerHeight;
+
+                gl.viewport(0, 0, this._canvas.width, this._canvas.height);
             }
         }
        
         private loop(): void{
             gl.clear(gl.COLOR_BUFFER_BIT);
 
+            gl.bindBuffer(gl.ARRAY_BUFFER, this._bufffer);
+            gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+            gl.enableVertexAttribArray(0);
+            gl.drawArrays(gl.TRIANGLES, 0, 3)
+
             requestAnimationFrame(this.loop.bind(this));
+        }
+
+        private createBuff() : void{
+            this._bufffer = gl.createBuffer();
+
+            let vertices = [
+                // x,y,z
+                0, 0, 0,
+                0, 0.5, 0,
+                0.5, 0.5, 0,
+            ];
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, this._bufffer);
+            gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+            gl.enableVertexAttribArray(0);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, undefined);
+            gl.disableVertexAttribArray(0);
         }
 
         private loadShaders() : void{
