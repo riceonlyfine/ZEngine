@@ -1,4 +1,8 @@
 namespace ZE{
+
+    /**
+     * The message manager responsible for sending message across the system.
+     */
     export class MessageBus{
 
         /**
@@ -20,9 +24,9 @@ namespace ZE{
         }
 
         /**
-         * Add a message subcription.
-         * @param code  message code.
-         * @param handler message handler.
+         * Add a message subcription to the provided code using the provided handler.
+         * @param code  he code to listen for.
+         * @param handler The handler to be subscribed.
          */
         public static addSubscription(code : string, handler : IMessageHandler) : void{
             if(MessageBus._subscriptions[code] === undefined){
@@ -37,9 +41,9 @@ namespace ZE{
         }
 
         /**
-         * Romve a message subscription.
-         * @param code message code.
-         * @param handler  message handler.
+         * Romve a message subcription to the provided code using the provided handler.
+         * @param code the code to listen for.
+         * @param handler  The handler to be subscribed.
          */
         public static removeSubscription(code : string, handler : IMessageHandler) : void{
             if(MessageBus._subscriptions[code] === undefined){
