@@ -1,16 +1,31 @@
 namespace ZE{
     export class MessageBus{
 
+        /**
+         * All message subsciprionts stores in herre.
+         */
         private static _subscriptions : { [code:string] : IMessageHandler[] } = {};
 
+        /**
+         * The normal prority message deal count per update.
+         */
         private static _normalQueueMessagePerUpdate : number = 10;
+
+        /**
+         * The normal prority message queue to be dealed.
+         */
         private static _normalMessageQueue : MessageSubscriptionNode[] = [];
 
         private constructor(){
         }
 
+        /**
+         * Add a message subcription.
+         * @param code  message code.
+         * @param handler message handler.
+         */
         public static addSubscription(code : string, handler : IMessageHandler) : void{
-            if(MessageBus._subscriptions[code] !== undefined){
+            if(MessageBus._subscriptions[code] === undefined){
                 MessageBus._subscriptions[code] = [];
             }
 
@@ -21,6 +36,11 @@ namespace ZE{
             }
         }
 
+        /**
+         * Romve a message subscription.
+         * @param code message code.
+         * @param handler  message handler.
+         */
         public static removeSubscription(code : string, handler : IMessageHandler) : void{
             if(MessageBus._subscriptions[code] === undefined){
                 console.warn("Cannot unsubscribe handler from code:" + code + ". Because that code is node subscribed to.");
@@ -32,7 +52,10 @@ namespace ZE{
             }
         }
 
-
+        /**
+         * Post a message.
+         * @param message 
+         */
         public static post(message : Message) : void{
             console.log("Message posted:", message);
             let  handlers = MessageBus._subscriptions[message.code];
@@ -49,7 +72,10 @@ namespace ZE{
             }
         }
 
-
+        /**
+         * The message deal loop.
+         * @param time 
+         */
         public static update(time : number) : void{
             if(MessageBus._normalMessageQueue.length === 0){
                 return;
