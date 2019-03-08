@@ -40,7 +40,7 @@ fs.readFile(index, function (err, buffer) {
     let appendJS = '';
 
     for (let i = 0; i < jsFiles.length; ++i){
-        appendJS += "<script type=\"text\/javascript\" src=\"" + jsFiles[i] + "\"><\/script>\r\n";
+        appendJS += "   <script type=\"text\/javascript\" src=\"" + jsFiles[i] + "\"><\/script>\r\n";
     }
     
 

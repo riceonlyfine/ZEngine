@@ -19,7 +19,7 @@ namespace ZE{
 
         private _canvas : HTMLCanvasElement;
         private _basicShader : BasicShader;
-        private _sprite : Sprite;
+      
         private _projection : Matrix4x4;
 
         /**
@@ -44,13 +44,11 @@ namespace ZE{
             // Load materials
             MaterialManager.registerMaterial(new Material("create", "assets/textures/bush_floor.png", new Color(255, 128, 0, 255)));
 
+            let zoneID = ZoneManager.createTestZone();
+
             // Load
             this._projection = Matrix4x4.orthographic(0, this._canvas.width, this._canvas.height, 0,  -100.0, 100.0);
-
-            this._sprite = new Sprite('test', "create");
-            this._sprite.load();
-            this._sprite.positon.x = 200;
-            this._sprite.positon.y = 200;
+            ZoneManager.changeZone(zoneID);
 
             this.resize();
             this.loop();
@@ -72,14 +70,17 @@ namespace ZE{
         private loop(): void{
             MessageBus.update(0);
 
+            ZoneManager.update(0);
+
             gl.clear(gl.COLOR_BUFFER_BIT);
+
+            ZoneManager.render(this._basicShader);
 
             // Set uniforms.
             let projectPosition = this._basicShader.getUniformLocation("u_projection");
             gl.uniformMatrix4fv(projectPosition, false, new Float32Array(this._projection.data));
 
-            // draw sprite
-            this._sprite.draw(this._basicShader);
+           
 
             requestAnimationFrame(this.loop.bind(this));
         }
