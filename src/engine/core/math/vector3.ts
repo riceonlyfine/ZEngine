@@ -35,12 +35,26 @@ namespace ZE{
             this._z = value;
         }
 
+        public static get zero() : Vector3{
+            return new Vector3();
+        }
+
+        public static get one() : Vector3{
+            return new Vector3(1, 1, 1);
+        }
+
         public toArray() : number[]{
             return [this._x, this._y, this._z];
         }
 
         public toFloat32Array() : Float32Array{
             return new Float32Array( this.toArray());
+        }
+
+        public copyFrom(vector : Vector3) : void{
+            this._x = vector.x;
+            this._y = vector.y;
+            this._z = vector.z;
         }
     }
 }
