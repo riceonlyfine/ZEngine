@@ -1,6 +1,6 @@
 namespace ZE{
 
-    export class Shader{
+    export abstract class Shader{
 
         private _name : string;
         private _program : WebGLProgram;
@@ -13,15 +13,8 @@ namespace ZE{
          * @param vetexSource  The Source of the vertex shader.
          * @param fragmentSource    The source of the fragment shader.
          */
-        public constructor(name : string, vertexSource : string, fragmentSource : string){
+        public constructor(name : string){
             this._name = name;
-            let vertexShader = this.loadShader(vertexSource, gl.VERTEX_SHADER);
-            let fragmentShader = this.loadShader(fragmentSource, gl.FRAGMENT_SHADER);
-
-           this.createProgram(vertexShader, fragmentShader);
-
-           this.detectAttributes();
-           this.detectUnifroms();
         }
 
         /**
@@ -62,6 +55,17 @@ namespace ZE{
 
             return this._uniforms[name];
         } 
+
+
+        protected load(vertexSource : string, fragmentSource : string) : void{
+            let vertexShader = this.loadShader(vertexSource, gl.VERTEX_SHADER);
+            let fragmentShader = this.loadShader(fragmentSource, gl.FRAGMENT_SHADER);
+
+           this.createProgram(vertexShader, fragmentShader);
+
+           this.detectAttributes();
+           this.detectUnifroms();
+        }
 
         private loadShader(source : string, shaderType : number) : WebGLShader{
             let shader : WebGLShader = gl.createShader(shaderType);

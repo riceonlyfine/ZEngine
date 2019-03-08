@@ -8,17 +8,17 @@ namespace ZE{
 
 
         private _bufffer : GLBuffer;
-        private _texture : Texture;
-        private _textureName : string;
+        private _material : Material;
+        private _materialName : string;
 
         public positon : Vector3 = new Vector3();
 
-        public constructor(name : string, textureName : string, width : number = 100, height : number = 100){
+        public constructor(name : string, materialName : string, width : number = 100, height : number = 100){
             this._name = name;
-            this._textureName = textureName;
+            this._materialName = materialName;
             this._width = width;
             this._height =  height;
-            this._texture = TextureManger.getTexture(textureName);
+            this._material = MaterialManager.getMaterial(materialName);
         }
 
         public get name() : string{
@@ -27,7 +27,9 @@ namespace ZE{
 
         public destroy() : void{
             this._bufffer.destroy();
-            TextureManger.releaseTexture(this._textureName);
+            MaterialManager.registerMaterial(this._material);
+            this._material = undefined;
+            this._materialName = undefined;
         }
 
         public load() : void{
@@ -68,9 +70,17 @@ namespace ZE{
 
         public draw(shader : Shader) : void{
 
-            this._texture.activeAndBind(0);
-            let diffuseLocation = shader.getUniformLocation("u_diffuse");
-            gl.uniform1i(diffuseLocation, 0);
+            let modelLocation = shader.getUniformLocation("u_model");
+            gl.uniformMatrix4fv(modelLocation, false, new Float32Array(Matrix4x4.translation(this.positon).data));
+
+            let colorLocation = shader.getUniformLocation("u_tint");
+            gl.uniform4fv(colorLocation, this._material.tint.toFloat32Array());
+
+            if(this._material.diffuseTexture !== undefined){
+                this._material.diffuseTexture.activeAndBind(0);
+                let diffuseLocation = shader.getUniformLocation("u_diffuse");
+                gl.uniform1i(diffuseLocation, 0);
+            }
 
             this._bufffer.bind();
             this._bufffer.draw();
