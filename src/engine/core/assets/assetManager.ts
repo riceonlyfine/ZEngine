@@ -28,6 +28,8 @@ namespace ZE{
             // reg image loader
             AssetManager._loaders.push(new ImageAssetLoader());
 
+            // reg json loader
+            AssetManager._loaders.push(new JsonAssetLoader());
         }
 
         /**

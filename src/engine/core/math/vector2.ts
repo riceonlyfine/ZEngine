@@ -35,5 +35,14 @@ namespace ZE{
         public toFloat32Array() : Float32Array{
             return new Float32Array( this.toArray());
         }
+
+        public setFromJson(json : any) : void{
+            if(json.x !== undefined){
+                this._x = Number(json.x);
+            }
+            if(json.y !== undefined){
+                this._y = Number(json.y);
+            }
+        }
     }
 }

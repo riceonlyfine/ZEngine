@@ -35,6 +35,7 @@ namespace ZE{
 
             this._canvas = GLUtils.initialize();
             AssetManager.initialize();
+            ZoneManager.initialize();
 
             gl.clearColor(0, 0, 0, 1);
 
@@ -44,12 +45,13 @@ namespace ZE{
             // Load materials
             MaterialManager.registerMaterial(new Material("create", "assets/textures/bush_floor.png", new Color(255, 128, 0, 255)));
 
-            let zoneID = ZoneManager.createTestZone();
-
             // Load
             this._projection = Matrix4x4.orthographic(0, this._canvas.width, this._canvas.height, 0,  -100.0, 100.0);
-            ZoneManager.changeZone(zoneID);
 
+            // TODO : Change this to be read from game configuration later.
+            ZoneManager.changeZone(0);
+
+            
             this.resize();
             this.loop();
         }
