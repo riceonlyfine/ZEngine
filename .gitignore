@@ -1,3 +1,4 @@
-bin/
-!bin/index.html
+*.js
+*.map.js
+*.d.ts
 node_modules/

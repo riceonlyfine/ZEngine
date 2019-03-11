@@ -106,7 +106,7 @@ namespace ZE{
                 gl.disableVertexAttribArray(it.location);
             }
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this._buffer);
+            gl.bindBuffer(this._targetBuffType, undefined);
         }
 
 
