@@ -1,28 +1,25 @@
-namespace ZE{
+/// <reference path="./zone.ts" />
 
+namespace ZE{
     export class TestZone extends Zone{
 
-        private _sprite : Sprite;
+        private _testObject : SimObject;
+        private _testSprite : SpriteComponent;
 
+
+        
         public load() : void{
 
+            this._testObject = new SimObject(0, "test object");
+            this._testSprite = new SpriteComponent("test sprite component", "create");
+            this._testObject.addComponent(this._testSprite);
 
-            this._sprite = new Sprite('test', "create");
-            this._sprite.load();
-            this._sprite.positon.x = 200;
-            this._sprite.positon.y = 200;
+            this._testObject.transform.position.x = 300;
+            this._testObject.transform.position.y = 300;
 
+            this.scene.addObject(this._testObject);
 
             super.load();
-        }
-
-
-        public render(shader : Shader) : void{
-
-             // draw sprite
-             this._sprite.draw(shader);
-
-             super.render(shader);
         }
     }
 }

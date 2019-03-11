@@ -11,8 +11,6 @@ namespace ZE{
         private _material : Material;
         private _materialName : string;
 
-        public positon : Vector3 = new Vector3();
-
         public constructor(name : string, materialName : string, width : number = 100, height : number = 100){
             this._name = name;
             this._materialName = materialName;
@@ -68,10 +66,10 @@ namespace ZE{
 
         }
 
-        public draw(shader : Shader) : void{
+        public draw(shader : Shader, mode : Matrix4x4) : void{
 
             let modelLocation = shader.getUniformLocation("u_model");
-            gl.uniformMatrix4fv(modelLocation, false, new Float32Array(Matrix4x4.translation(this.positon).data));
+            gl.uniformMatrix4fv(modelLocation, false, mode.toFloat32Array());
 
             let colorLocation = shader.getUniformLocation("u_tint");
             gl.uniform4fv(colorLocation, this._material.tint.toFloat32Array());

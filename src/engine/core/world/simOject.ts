@@ -6,6 +6,7 @@ namespace ZE{
         private _children : SimObject[] = [];
         private _parent : SimObject;
         private _scene : Scene;
+        private _components : BaseComponent[] = [];
         private _isLoaded : boolean = false;
         
         private _localMatrix : Matrix4x4 = Matrix4x4.identify();
@@ -41,12 +42,25 @@ namespace ZE{
         }
 
         public update(time : number) : void{
+
+            this._localMatrix = this.transform.getTransformationMatrix();
+            this.updateWorldMatrix( (this._parent !== undefined) ? this._parent.worldMatrix : undefined);
+
+            for(let c of this._components){
+                c.update(time);
+            }
+
             for (let child of this._children){
                 child.update(time);
             }
         }
 
         public render(shader : Shader) : void{
+
+            for(let c of this._components){
+                c.render(shader);
+            }
+
             for (let child of this._children){
                 child.render(shader);
             }
@@ -81,9 +95,19 @@ namespace ZE{
             return undefined;
         }
 
+        public addComponent(component : BaseComponent) : void{
+            this._components.push(component);
+            component.setOwner(this);
+        }
+
+
         public load() : void{
 
             this._isLoaded = true;
+
+            for(let c of this._components){
+                c.load();
+            }
 
             for (let child of this._children){
                 child.load();
@@ -92,6 +116,14 @@ namespace ZE{
 
         protected onAdded(scene : Scene){
             this._scene = scene;
+        }
+
+        private updateWorldMatrix(parentWorldMatrix : Matrix4x4) : void{
+            if(parentWorldMatrix !== undefined){
+                this._worldMatrix = Matrix4x4.multiply(parentWorldMatrix, this._localMatrix);
+            } else{
+                this._worldMatrix.copyFrom(this._localMatrix);
+            }
         }
 
     }

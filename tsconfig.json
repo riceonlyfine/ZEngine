@@ -1,13 +1,22 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "noEmitHelpers": false,
-    "sourceMap": true,
-    "outDir": "bin/",
-    
+      "module": "amd",
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "outFile": "./bin/bundle.js",
+      "outDir": "./bin",
+      "sourceMap": true,
+      "declaration": true,
+      //"declarationMap": true,
+      "target": "es5"
   },
+  "include": [
+      "**/*.ts"
+  ],
   "exclude": [
-    "node_modules"
+      "node_modules",
+      "**/*.spec.ts",
+      "**/*.d.ts"
   ]
 }

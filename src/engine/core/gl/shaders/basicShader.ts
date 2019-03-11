@@ -1,3 +1,6 @@
+
+/// <reference path="./shader.ts" />
+
 namespace ZE{
     export class BasicShader extends Shader{
         public constructor(){

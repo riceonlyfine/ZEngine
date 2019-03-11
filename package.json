@@ -1,0 +1,25 @@
+{
+  "name": "zengine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "insertHtml.js",
+  "bin": {
+    "zengine": "app.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riceonlyfine/ZEngine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/riceonlyfine/ZEngine/issues"
+  },
+  "homepage": "https://github.com/riceonlyfine/ZEngine#readme",
+  "devDependencies": {
+    "typescript": "^3.3.3"
+  }
+}
