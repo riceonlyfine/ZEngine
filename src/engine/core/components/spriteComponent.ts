@@ -1,11 +1,43 @@
+
+/// <reference path="./componentManager.ts" />
+
 namespace ZE{
+
+    export class SpriteComponentData implements IComponnetData{
+        public name : string;
+        public materialName : string;
+
+        public setFromJson(json : any) : void{
+            if(json.name !== undefined){
+                this.name = String(json.name);
+            }
+            if(json.materialName !== undefined){
+                this.materialName = String(json.materialName);
+            }
+        }
+    }
+
+    export class SpriteComponentBuilder implements IComponentBuilder {
+
+        public get type() : string{
+            return "sprite";
+        }
+
+        public buildFromJson(json: any): IComponent {
+            let data = new SpriteComponentData();
+            data.setFromJson(json);
+            
+            return new SpriteComponent(data);
+        }
+    }
+
     export class SpriteComponent extends BaseComponent{
         private _sprite : Sprite;
 
-        public constructor(name : string, materialName : string){
-            super(name);
+        public constructor(data : SpriteComponentData){
+            super(data);
 
-            this._sprite = new Sprite(name, materialName);
+            this._sprite = new Sprite(name, data.materialName);
         }
 
         public load() : void{
@@ -19,4 +51,7 @@ namespace ZE{
         }
 
     }
+
+
+    ComponentManager.registerBuilder(new SpriteComponentBuilder());
 }

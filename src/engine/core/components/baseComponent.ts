@@ -1,13 +1,15 @@
 namespace ZE{
 
-    export abstract class BaseComponent{
+    export abstract class BaseComponent implements IComponent{
 
         protected _owner : SimObject;
+        protected _data : IComponnetData;
 
         public name : string;
 
-        public constructor(name : string){
-
+        public constructor(data : IComponnetData){
+            this._data = data;
+            this.name = data.name;
         }
 
         public load() : void{

@@ -45,7 +45,7 @@ namespace ZE{
 
 
             for (let o in zoneData.objects){
-                let obj = zoneData.objects[0];
+                let obj = zoneData.objects[o];
                 this.loadSimObject(obj, this._scene.root);
             }
             
@@ -93,13 +93,21 @@ namespace ZE{
             this._globalID++;
             let simObject = new SimObject(this._globalID, name, this._scene);
 
-            if(dataSection.transfrom !== undefined){
+            if(dataSection.transform !== undefined){
                 simObject.transform.setFromJson(dataSection.transform);
             }
 
+            if(dataSection.components !== undefined){
+                for(let c in dataSection.components){
+                    let data = dataSection.components[c];
+                    let component = ComponentManager.extractComponent(data);
+                    simObject.addComponent(component);
+                }
+            }
+
             if(dataSection.children !== undefined){
-                for (let o in dataSection.objects){
-                    let obj = dataSection.objects[0];
+                for (let o in dataSection.children){
+                    let obj = dataSection.children[0];
                     this.loadSimObject(obj, simObject);
                 }
             }

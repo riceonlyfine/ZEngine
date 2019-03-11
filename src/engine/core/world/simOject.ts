@@ -6,7 +6,7 @@ namespace ZE{
         private _children : SimObject[] = [];
         private _parent : SimObject;
         private _scene : Scene;
-        private _components : BaseComponent[] = [];
+        private _components : IComponent[] = [];
         private _isLoaded : boolean = false;
         
         private _localMatrix : Matrix4x4 = Matrix4x4.identify();
@@ -95,7 +95,7 @@ namespace ZE{
             return undefined;
         }
 
-        public addComponent(component : BaseComponent) : void{
+        public addComponent(component : IComponent) : void{
             this._components.push(component);
             component.setOwner(this);
         }
