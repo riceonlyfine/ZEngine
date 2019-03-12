@@ -53,6 +53,8 @@ namespace ZE{
             MaterialManager.registerMaterial(new Material("create", "assets/textures/bush_floor.png", Color.white()));
             MaterialManager.registerMaterial(new Material("boom", "assets/textures/boom.png", Color.white()));
 
+            AudioManager.loadSoundFile("test", "assets/sounds/1.mp3", false);
+
             // Load
             this._projection = Matrix4x4.orthographic(0, this._canvas.width, this._canvas.height, 0,  -100.0, 100.0);
 
@@ -81,6 +83,8 @@ namespace ZE{
             if(message.code == "MOUSE_UP"){
                 let context = message.context as MouseContext;
                 document.title = `Pos:[${context.position.x},${context.position.y}]`;
+
+                AudioManager.playSound("test");
             }
         }
        
