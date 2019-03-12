@@ -43,6 +43,26 @@ namespace ZE{
             return new Vector3(1, 1, 1);
         }
 
+        public set (x ?: number , y ?: number,  z ?: number){
+            if(x !== undefined){
+                this._x = x;
+            }
+            if(y !== undefined){
+                this._y = y;
+            }
+            if(z !== undefined){
+                this._z = z;
+            }
+        }
+
+        /**
+         * Check if this vector is equal to the one passed in.
+         * @param v The vector to check against.
+         */
+        public equals(v : Vector3) : boolean{
+            return this._x === v.x && this._y === v.y && this._z == v.z;
+        }
+
         public toArray() : number[]{
             return [this._x, this._y, this._z];
         }

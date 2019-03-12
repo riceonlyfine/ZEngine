@@ -82,7 +82,11 @@
                 {
                     "name": "test a",
                     "type": "sprite",
-                    "materialName": "create"
+                    "materialName": "create",
+                    "origin":{
+                        "x":0.5,
+                        "y":0.5
+                    }
                 }
             ],
             "behaviors": [

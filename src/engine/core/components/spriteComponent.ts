@@ -6,6 +6,7 @@ namespace ZE{
     export class SpriteComponentData implements IComponnetData{
         public name : string;
         public materialName : string;
+        public origin : Vector3 = Vector3.zero;
 
         public setFromJson(json : any) : void{
             if(json.name !== undefined){
@@ -13,6 +14,9 @@ namespace ZE{
             }
             if(json.materialName !== undefined){
                 this.materialName = String(json.materialName);
+            }
+            if(json.origin !== undefined){
+                this.origin.setFromJson(json.origin);
             }
         }
     }
@@ -38,6 +42,9 @@ namespace ZE{
             super(data);
 
             this._sprite = new Sprite(name, data.materialName);
+            if(!data.origin.equals(Vector3.zero)){
+                this._sprite.origin.copyFrom(data.origin);
+            }
         }
 
         public load() : void{

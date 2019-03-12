@@ -5,12 +5,14 @@ namespace ZE {
         protected _width: number;
         protected _height: number;
         protected _name: string;
+        protected _origin : Vector3 = Vector3.zero;
 
 
         protected _bufffer: GLBuffer;
         protected _material: Material;
         protected _materialName: string;
         protected _vertices: Vertex[];
+        
 
         public constructor(name: string, materialName: string, width: number = 100, height: number = 100) {
             this._name = name;
@@ -23,6 +25,15 @@ namespace ZE {
         public get name(): string {
             return this._name;
         }
+
+        public get origin() : Vector3{
+            return this._origin;
+        }
+
+        public set origin(value : Vector3) {
+            this._origin = value;
+            this.recalcualteVertices();
+        } 
 
         public destroy(): void {
             this._bufffer.destroy();
@@ -44,25 +55,11 @@ namespace ZE {
             textCoordAttribute.size = 2;
             this._bufffer.addAttributeLocation(textCoordAttribute);
 
-            this._vertices = [
-                // x,y,z,u,v
-                new Vertex(0, 0, 0, 0, 0),
-                new Vertex(0, this._height, 0, 0, 1.0),
-                new Vertex(this._width, this._height, 0, 1.0, 1.0),
-
-                new Vertex(this._width, this._height, 0, 1.0, 1.0),
-                new Vertex(this._width, 0, 0, 1.0, 0),
-                new Vertex(0, 0, 0, 0, 0)
-            ];
-
-            for (let v of this._vertices){
-                this._bufffer.pushBackData(v.toArray());
-            }
-            
-            this._bufffer.upload();
-            this._bufffer.unbind();
+            this.calculateVertices();
         }
 
+
+        
 
         public update(time: number): void {
 
@@ -84,6 +81,56 @@ namespace ZE {
 
             this._bufffer.bind();
             this._bufffer.draw();
+        }
+
+        protected calculateVertices() : void{
+            let minX = -(this._width * this._origin.x);
+            let maxX = this._width * (1 - this._origin.x);
+            let minY = -(this._height * this._origin.y);
+            let maxY = this._height * (1 - this._origin.y);
+
+            this._vertices = [
+                // x,y,z,u,v
+                new Vertex(minX, minY, 0, 0, 0),
+                new Vertex(minX, maxY, 0, 0, 1.0),
+                new Vertex(maxX, maxY, 0, 1.0, 1.0),
+
+                new Vertex(maxX, maxY, 0, 1.0, 1.0),
+                new Vertex(maxX, minY, 0, 1.0, 0),
+                new Vertex(minX, minY, 0, 0, 0)
+            ];
+
+            for (let v of this._vertices){
+                this._bufffer.pushBackData(v.toArray());
+            }
+            
+            this._bufffer.upload();
+            this._bufffer.unbind();
+        }
+
+        protected recalcualteVertices() : void{
+
+            let minX = -(this._width * this._origin.x);
+            let maxX = this._width * (1 - this._origin.x);
+            let minY = -(this._height * this._origin.y);
+            let maxY = this._height * (1 - this._origin.y);
+
+            // x,y,z,u,v
+            this._vertices[0].positon.set(minX, minY);
+            this._vertices[1].positon.set(minX, maxY);
+            this._vertices[2].positon.set(maxX, maxY);
+
+            this._vertices[3].positon.set(maxX, maxY);
+            this._vertices[4].positon.set(maxX, minY);
+            this._vertices[5].positon.set(minX, minY);
+
+            this._bufffer.clearData();
+            for (let v of this._vertices){
+                this._bufffer.pushBackData(v.toArray());
+            }
+            
+            this._bufffer.upload();
+            this._bufffer.unbind();
         }
 
     }
