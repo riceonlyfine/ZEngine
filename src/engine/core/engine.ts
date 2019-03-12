@@ -19,8 +19,8 @@ namespace ZE{
 
         private _canvas : HTMLCanvasElement;
         private _basicShader : BasicShader;
-      
         private _projection : Matrix4x4;
+        private _previousTime : number;
 
         /**
          * create new engine.
@@ -44,6 +44,7 @@ namespace ZE{
 
             // Load materials
             MaterialManager.registerMaterial(new Material("create", "assets/textures/bush_floor.png", Color.white()));
+            MaterialManager.registerMaterial(new Material("boom", "assets/textures/boom.png", Color.white()));
 
             // Load
             this._projection = Matrix4x4.orthographic(0, this._canvas.width, this._canvas.height, 0,  -100.0, 100.0);
@@ -70,19 +71,31 @@ namespace ZE{
         }
        
         private loop(): void{
-            MessageBus.update(0);
+            this.update();
+            this.render();
+        }
+        
 
-            ZoneManager.update(0);
+        private update(): void{
+            let delta = performance.now() - this._previousTime;
 
+            MessageBus.update(delta);
+
+            ZoneManager.update(delta);
+
+            this._previousTime = performance.now();
+        }
+
+        private render() : void{
             gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
             ZoneManager.render(this._basicShader);
 
             // Set uniforms.
             let projectPosition = this._basicShader.getUniformLocation("u_projection");
             gl.uniformMatrix4fv(projectPosition, false, new Float32Array(this._projection.data));
-
-           
 
             requestAnimationFrame(this.loop.bind(this));
         }

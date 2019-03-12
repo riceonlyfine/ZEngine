@@ -28,6 +28,19 @@ namespace ZE{
             this._y = value;
         }
 
+        public static get zero() : Vector2{
+            return new Vector2();
+        }
+
+        public static get one() : Vector2{
+            return new Vector2(1, 1);
+        }
+
+        public copyFrom(v : Vector2) : void{
+            this._x = v._x;
+            this._y = v._y;
+        }
+
         public toArray() : number[]{
             return [this._x, this._y];
         }
