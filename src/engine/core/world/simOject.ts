@@ -7,6 +7,7 @@ namespace ZE{
         private _parent : SimObject;
         private _scene : Scene;
         private _components : IComponent[] = [];
+        private _behaviors : IBehavior[] = [];
         private _isLoaded : boolean = false;
         
         private _localMatrix : Matrix4x4 = Matrix4x4.identify();
@@ -50,6 +51,10 @@ namespace ZE{
                 c.update(time);
             }
 
+            for(let b of this._behaviors){
+                b.update(time);
+            }
+
             for (let child of this._children){
                 child.update(time);
             }
@@ -60,6 +65,7 @@ namespace ZE{
             for(let c of this._components){
                 c.render(shader);
             }
+
 
             for (let child of this._children){
                 child.render(shader);
@@ -100,6 +106,10 @@ namespace ZE{
             component.setOwner(this);
         }
 
+        public addBehavior(behavior : IBehavior) : void{
+            this._behaviors.push(behavior);
+            behavior.setOwner(this);
+        }
 
         public load() : void{
 

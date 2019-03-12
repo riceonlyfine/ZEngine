@@ -68,5 +68,37 @@ namespace ZE{
                 this._z = Number(json.z);
             }
         }
+
+        public add(v : Vector3) : Vector3{
+            this._x += v._x;
+            this._y += v._y;
+            this._z += v._z;
+
+            return this;
+        }
+
+        public substract(v : Vector3) : Vector3{
+            this._x -= v._x;
+            this._y -= v._y;
+            this._z -= v._z;
+
+            return this;
+        }
+
+        public multipy(v : Vector3) : Vector3{
+            this._x *= v._x;
+            this._y *= v._y;
+            this._z *= v._z;
+
+            return this;
+        }
+
+        public divide(v : Vector3) : Vector3{
+            this._x /= v._x;
+            this._y /= v._y;
+            this._z /= v._z;
+
+            return this;
+        }
     }
 }
