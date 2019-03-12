@@ -43,7 +43,7 @@ namespace ZE{
             this._basicShader.use();
 
             // Load materials
-            MaterialManager.registerMaterial(new Material("create", "assets/textures/bush_floor.png", new Color(255, 128, 0, 255)));
+            MaterialManager.registerMaterial(new Material("create", "assets/textures/bush_floor.png", Color.white()));
 
             // Load
             this._projection = Matrix4x4.orthographic(0, this._canvas.width, this._canvas.height, 0,  -100.0, 100.0);
@@ -51,7 +51,7 @@ namespace ZE{
             // TODO : Change this to be read from game configuration later.
             ZoneManager.changeZone(0);
 
-            
+
             this.resize();
             this.loop();
         }

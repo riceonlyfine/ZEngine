@@ -41,13 +41,12 @@ namespace ZE{
 
         /**
          * Create a new GL buffer.
-         * @param elementSize  the size of the element size.
          * @param dataType  The data type of this buffer. Default : gl.FLOAT.
          * @param targetBufferType The buffer target type. gl.ARRAY_BUFFER or gl.ELEMENT_ARRAY_BUFFER. Default ： gl.ARRAY_BUFFER.
          * @param mode  The drawing mode of this buffer.(i.e. gl.TRANGLES or gl.LINES). Default : gl.TRANGLES.
          */
-        public constructor(elementSize : number, dataType : number = gl.FLOAT, targetBufferType : number = gl.ARRAY_BUFFER, mode : number = gl.TRIANGLES){
-            this._elementSize = elementSize;
+        public constructor( dataType : number = gl.FLOAT, targetBufferType : number = gl.ARRAY_BUFFER, mode : number = gl.TRIANGLES){
+            this._elementSize = 0;
             this._dataType = dataType;
             this._targetBuffType = targetBufferType;
             this._mode = mode;
@@ -71,7 +70,7 @@ namespace ZE{
                     throw new Error("Unrecognized data type:" + dataType.toString());
             }
 
-            this._stride = this._elementSize * this._typeSize;
+            
             this._buffer = gl.createBuffer();
         }
 
@@ -116,9 +115,20 @@ namespace ZE{
          */
         public addAttributeLocation(info : AttributeInfo) : void{
             this._hasAttributeLocaiton = true;
+            info.offset = this._elementSize;
             this._attributes.push(info);
+            this._elementSize += info.size;
+            this._stride = this._elementSize * this._typeSize;
         }
 
+        /**
+         * Replace the current in this buffer with the provided data.
+         * @param data The data to be loaded in this buffer.
+         */
+        public setData(data : number[]) : void{
+            this.clearData();
+            this.pushBackData(data);
+        }
 
         /**
          * Adds data to this buffer.
@@ -128,6 +138,13 @@ namespace ZE{
            for(let d of data){
                 this._data.push(d);
            }
+        }
+
+        /**
+         * Clears out all data in this buffer.
+         */
+        public clearData() : void{  
+            this._data.length = 0;
         }
 
         /**

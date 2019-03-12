@@ -31,17 +31,15 @@ namespace ZE{
         }
 
         public load() : void{
-            this._bufffer = new GLBuffer(5);
+            this._bufffer = new GLBuffer();
 
             let positionAttribute = new AttributeInfo();
             positionAttribute.location = 0;
-            positionAttribute.offset = 0;
             positionAttribute.size = 3;
             this._bufffer.addAttributeLocation(positionAttribute);
 
             let textCoordAttribute = new AttributeInfo();
             textCoordAttribute.location = 1;
-            textCoordAttribute.offset = 3;
             textCoordAttribute.size = 2;
             this._bufffer.addAttributeLocation(textCoordAttribute);
 
