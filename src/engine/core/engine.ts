@@ -15,8 +15,9 @@ namespace ZE{
     /**
      * The main game engine class
      */
-    export class Engine {
+    export class Engine implements IMessageHandler {
 
+       
         private _canvas : HTMLCanvasElement;
         private _basicShader : BasicShader;
         private _projection : Matrix4x4;
@@ -35,9 +36,15 @@ namespace ZE{
 
             this._canvas = GLUtils.initialize();
             AssetManager.initialize();
+            InputManager.initialize();
             ZoneManager.initialize();
 
+            Message.subscribe("MOUSE_UP", this);
+
+
             gl.clearColor(0, 0, 0, 1);
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
             this._basicShader = new BasicShader();
             this._basicShader.use();
@@ -69,6 +76,13 @@ namespace ZE{
                 this._projection = Matrix4x4.orthographic(0, this._canvas.width, this._canvas.height, 0,  -100.0, 100.0);
             }
         }
+
+        public onMessage(message: Message): void {
+            if(message.code == "MOUSE_UP"){
+                let context = message.context as MouseContext;
+                document.title = `Pos:[${context.position.x},${context.position.y}]`;
+            }
+        }
        
         private loop(): void{
             this.update();
@@ -88,8 +102,6 @@ namespace ZE{
 
         private render() : void{
             gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.enable(gl.BLEND);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
             ZoneManager.render(this._basicShader);
 
@@ -99,6 +111,8 @@ namespace ZE{
 
             requestAnimationFrame(this.loop.bind(this));
         }
+
+        
 
 
     }
