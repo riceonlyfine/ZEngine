@@ -11,8 +11,8 @@
                     "y": 100
                 },
                 "scale": {
-                    "x": 2,
-                    "y": 2
+                    "x": 1,
+                    "y": 1
                 }
             },
             "components": [
@@ -33,6 +33,14 @@
                         6,
                         7
                     ]
+                },
+                {
+                    "name" : "boomCollision",
+                    "type":"collision",
+                    "shape":{
+                        "type": "circle",
+                        "radius": 240
+                    }
                 }
             ],
             "behaviors":[

@@ -36,6 +36,39 @@ namespace ZE{
             return new Vector2(1, 1);
         }
 
+        public static distance(a : Vector2, b : Vector2) : number{
+            let diff = a.substract(b);
+            return Math.sqrt(diff.x*diff.x + diff.y*diff.y);
+        }
+
+        public add(v : Vector2) : Vector2{
+            this._x += v._x;
+            this._y += v._y;
+
+            return this;
+        }
+
+        public substract(v : Vector2) : Vector2{
+            this._x -= v._x;
+            this._y -= v._y;
+
+            return this;
+        }
+
+        public multipy(v : Vector2) : Vector2{
+            this._x *= v._x;
+            this._y *= v._y;
+
+            return this;
+        }
+
+        public divide(v : Vector2) : Vector2{
+            this._x /= v._x;
+            this._y /= v._y;
+
+            return this;
+        }
+
         public copyFrom(v : Vector2) : void{
             this._x = v._x;
             this._y = v._y;

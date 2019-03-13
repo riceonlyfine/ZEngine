@@ -44,9 +44,18 @@ namespace ZE{
             if(other instanceof Rectangle2D){
                 if(this.pointInShape(other.position) || 
                    this.pointInShape(new Vector2(other.position.x + other.width, other.position.y)) || 
-                   this.pointInShape(new Vector2(other.position.x + other.width, other.position.y + other.position.height)) ||
-                   this.pointInShape(new Vector2(other.position.x , other.position.y + other.position.height))){
+                   this.pointInShape(new Vector2(other.position.x + other.width, other.position.y + other.height)) ||
+                   this.pointInShape(new Vector2(other.position.x , other.position.y + other.height))){
                     return true;
+                }
+            }
+
+            if(other instanceof Circle2D){
+                if(other.pointInShape(this.position) || 
+                   other.pointInShape(new Vector2(this.position.x + this.width, this.position.y)) || 
+                   other.pointInShape(new Vector2(this.position.x + this.width, this.position.y + this.height)) ||
+                   other.pointInShape(new Vector2(this.position.x , this.position.y + this.height))){
+                   return true;
                 }
             }
 

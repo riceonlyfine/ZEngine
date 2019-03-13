@@ -43,6 +43,11 @@ namespace ZE{
             return new Vector3(1, 1, 1);
         }
 
+        public static distance(a : Vector3, b : Vector3) : number{
+            let diff = a.substract(b);
+            return Math.sqrt(diff.x*diff.x + diff.y*diff.y + diff.z*diff.z);
+        }
+
         public set (x ?: number , y ?: number,  z ?: number){
             if(x !== undefined){
                 this._x = x;
