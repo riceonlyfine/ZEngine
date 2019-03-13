@@ -2,28 +2,31 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>engine test demo</title>
+    <title>TypeScript Tutorial</title>
+    <script type="text/javascript" src="bundle.js"></script>
     <style type="text/css">
-
-        html,body{
+        html, body {
             padding: 0;
-            margin:0;
+            margin: 0;
             overflow: hidden;
+            background: black;
         }
 
-        canvas{
+        canvas {
             width: 100%;
             height: 100%;
         }
 
+        #gameArea {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
     </style>
 </head>
 <body>
-
-   
-   <script type="text/javascript" src="bundle.js"></script>
-
-
-
+    <div id="gameArea">
+        <canvas id="viewport"></canvas>
+    </div>
 </body>
 </html>

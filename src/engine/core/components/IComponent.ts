@@ -1,16 +1,41 @@
-namespace ZE{
-    export interface IComponent{
+﻿namespace ZE {
 
-        name : string;
+    /**
+     * Components are renderable objects which are attached to TEntities in the world.
+     * These components inherit the transforms of the object to which they are attached.
+     */
+    export interface IComponent {
 
-        setOwner(owner : SimObject) : void;
+        /**
+         * The name of this component.
+         */
+        name: string;
 
-        readonly owner : SimObject;
+        /** The owning entity. */
+        readonly owner: TEntity;
 
-        load() : void;
+        /**
+         * Sets the owner of this component.
+         * @param owner The owner to be set.
+         */
+        setOwner( owner: TEntity ): void;
 
-        update(time : number) : void ;
-        
-        render(shader : Shader) : void;
+        /** Performs pre-update procedures on this component. */
+        updateReady(): void;
+
+        /** Loads this component. */
+        load(): void;
+
+        /**
+         * Updates this component.
+         * @param time The amount of time in milliseconds since the last update.
+         */
+        update( time: number ): void;
+
+        /**
+         * Renders this component.
+         * @param shader The shader to use for rendering.
+         */
+        render( shader: Shader ): void;
     }
 }

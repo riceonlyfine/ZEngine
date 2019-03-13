@@ -1,19 +1,15 @@
-namespace ZE{
+﻿namespace ZE {
 
-    /**
-     * The asset loader interface.
-     */
-    export interface IAssetLoader{
-        /**
-         * Supported asset extensions.
-         */
-        readonly supportedExtension : string[];
+    /** Represents an asset loader. */
+    export interface IAssetLoader {
+
+        /** The extensions supported by this asset loader. */
+        readonly supportedExtensions: string[];
 
         /**
-         * Load asset.
-         * @param assetName 
+         * Loads an asset with the given name.
+         * @param assetName The name of the asset to be loaded.
          */
-        loadAsset(assetName : string) : void;
+        loadAsset( assetName: string ): void;
     }
-
 }

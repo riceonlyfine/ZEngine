@@ -1,49 +1,64 @@
-namespace ZE {
+﻿namespace ZE {
 
+    /** A 4x4 matrix to be used for transformations. */
     export class Matrix4x4 {
 
         private _data: number[] = [];
 
+        /** Creates a new matrix 4x4. Marked as private to enforce the use of static methods. */
         private constructor() {
             this._data = [
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1
+                1.0, 0, 0, 0,
+                0, 1.0, 0, 0,
+                0, 0, 1.0, 0,
+                0, 0, 0, 1.0
             ];
         }
 
+        /** Returns the data contained in this matrix as an array of numbers. */
         public get data(): number[] {
             return this._data;
         }
 
-        public static identify(): Matrix4x4 {
+        /** Creates and returns an identity matrix. */
+        public static identity(): Matrix4x4 {
             return new Matrix4x4();
         }
 
-        public static orthographic(left: number, right: number, bottom: number, top: number, nearClip: number, farClip: number): Matrix4x4 {
+        /**
+         * Creates and returns a new orthographic projection matrix.
+         * @param left The left extents of the viewport.
+         * @param right The right extents of the viewport.
+         * @param bottom The bottom extents of the viewport.
+         * @param top The top extents of the viewport.
+         * @param nearClip The near clipping plane.
+         * @param farClip The far clipping plane.
+         */
+        public static orthographic( left: number, right: number, bottom: number, top: number, nearClip: number, farClip: number ): Matrix4x4 {
             let m = new Matrix4x4();
 
-            let lr: number = 1.0 / (left - right);
-            let bt: number = 1.0 / (bottom - top);
-            let nf: number = 1.0 / (nearClip - farClip);
+            let lr: number = 1.0 / ( left - right );
+            let bt: number = 1.0 / ( bottom - top );
+            let nf: number = 1.0 / ( nearClip - farClip );
 
             m._data[0] = -2.0 * lr;
+
             m._data[5] = -2.0 * bt;
+
             m._data[10] = 2.0 * nf;
 
-            m._data[12] = (left + right) * lr;
-            m._data[13] = (top + bottom) * bt;
-            m._data[14] = (farClip + nearClip) * nf;
+            m._data[12] = ( left + right ) * lr;
+            m._data[13] = ( top + bottom ) * bt;
+            m._data[14] = ( farClip + nearClip ) * nf;
 
             return m;
         }
 
         /**
-         * position translation.
-         * @param position 
+         * Creates a transformation matrix using the provided position.
+         * @param position The position to be used in transformation.
          */
-        public static translation(position: Vector3): Matrix4x4 {
+        public static translation( position: Vector3 ): Matrix4x4 {
             let m = new Matrix4x4();
 
             m._data[12] = position.x;
@@ -53,11 +68,15 @@ namespace ZE {
             return m;
         }
 
-        public static rotationX(angleInRadians : number) : Matrix4x4{
+        /**
+         * Creates a rotation matrix on the X axis from the provided angle in radians.
+         * @param angleInRadians The angle in radians.
+         */
+        public static rotationX( angleInRadians: number ): Matrix4x4 {
             let m = new Matrix4x4();
 
-            let c = Math.cos(angleInRadians);
-            let s = Math.sin(angleInRadians);
+            let c = Math.cos( angleInRadians );
+            let s = Math.sin( angleInRadians );
 
             m._data[5] = c;
             m._data[6] = s;
@@ -67,11 +86,15 @@ namespace ZE {
             return m;
         }
 
-        public static rotationY(angleInRadians : number) : Matrix4x4{
+        /**
+         * Creates a rotation matrix on the Y axis from the provided angle in radians.
+         * @param angleInRadians The angle in radians.
+         */
+        public static rotationY( angleInRadians: number ): Matrix4x4 {
             let m = new Matrix4x4();
 
-            let c = Math.cos(angleInRadians);
-            let s = Math.sin(angleInRadians);
+            let c = Math.cos( angleInRadians );
+            let s = Math.sin( angleInRadians );
 
             m._data[0] = c;
             m._data[2] = -s;
@@ -81,11 +104,15 @@ namespace ZE {
             return m;
         }
 
-        public static rotationZ(angleInRadians : number) : Matrix4x4{
+        /**
+         * Creates a rotation matrix on the Z axis from the provided angle in radians.
+         * @param angleInRadians The angle in radians.
+         */
+        public static rotationZ( angleInRadians: number ): Matrix4x4 {
             let m = new Matrix4x4();
 
-            let c = Math.cos(angleInRadians);
-            let s = Math.sin(angleInRadians);
+            let c = Math.cos( angleInRadians );
+            let s = Math.sin( angleInRadians );
 
             m._data[0] = c;
             m._data[1] = s;
@@ -95,16 +122,26 @@ namespace ZE {
             return m;
         }
 
-        public static rotationXYZ(xRadians : number, yRadians : number, zRadians : number) : Matrix4x4{
-            let rx = Matrix4x4.rotationX(xRadians);
-            let ry = Matrix4x4.rotationY(yRadians);
-            let rz = Matrix4x4.rotationZ(zRadians);
+        /**
+         * Creates a rotation matrix from the provided angles in radians.
+         * @param xRadians The angle in radians on the X axis. 
+         * @param yRadians The angle in radians on the Y axis. 
+         * @param zRadians The angle in radians on the Z axis. 
+         */
+        public static rotationXYZ( xRadians: number, yRadians: number, zRadians: number ): Matrix4x4 {
+            let rx = Matrix4x4.rotationX( xRadians );
+            let ry = Matrix4x4.rotationY( yRadians );
+            let rz = Matrix4x4.rotationZ( zRadians );
 
-            return Matrix4x4.multiply(Matrix4x4.multiply(rz , ry), rx);
+            // ZYX
+            return Matrix4x4.multiply( Matrix4x4.multiply( rz, ry ), rx );
         }
 
-
-        public static scale(scale : Vector3) : Matrix4x4{
+        /**
+         * Creates a scale matrix.
+         * @param scale The scale to use.
+         */
+        public static scale( scale: Vector3 ): Matrix4x4 {
             let m = new Matrix4x4();
 
             m._data[0] = scale.x;
@@ -114,8 +151,12 @@ namespace ZE {
             return m;
         }
 
-
-        public static multiply(a : Matrix4x4, b : Matrix4x4) : Matrix4x4{
+        /**
+         * Multiplies matrix a by matrix b and returns the result.
+         * @param a The first matrix.
+         * @param b The second matrix.
+         */
+        public static multiply( a: Matrix4x4, b: Matrix4x4 ): Matrix4x4 {
             let m = new Matrix4x4();
 
             let b00 = b._data[0 * 4 + 0];
@@ -171,13 +212,18 @@ namespace ZE {
             return m;
         }
 
-        public toFloat32Array() : Float32Array{
-            return new Float32Array(this._data);
+        /** Returns the data of this matrix as a Float32Array. */
+        public toFloat32Array(): Float32Array {
+            return new Float32Array( this._data );
         }
 
-        public copyFrom(matrix : Matrix4x4) : void{
-            for (let i = 0; i < 16; ++i){
-                this._data[i] = matrix._data[i];
+        /**
+         * Creates a copy of matrix m.
+         * @param m The matrix to copy.
+         */
+        public copyFrom( m: Matrix4x4 ): void {
+            for ( let i = 0; i < 16; ++i ) {
+                this._data[i] = m._data[i];
             }
         }
     }

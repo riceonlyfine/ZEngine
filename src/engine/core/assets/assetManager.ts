@@ -1,84 +1,74 @@
-namespace ZE{
-
-    export const MESSAGE_ASSET_LOADER_ASSET_LOADED = "MESSAGE_ASSET_LOADER_ASSET_LOADED::";
+﻿namespace ZE {
 
     /**
-     * The assetmanager manages all kinds of assets.
+     * The message code prefix for asset load notifications.
      */
-    export class AssetManager{
+    export const MESSAGE_ASSET_LOADER_ASSET_LOADED = "MESSAGE_ASSET_LOADER_ASSET_LOADED::";
 
-        /**
-         * The loader of all kinds of asset.
-         */
-        private static _loaders : IAssetLoader[] = [];
+    /** Manages all assets in the engine. */
+    export class AssetManager {
 
-        /**
-         * The loaded assets stores in here.
-         */
-        private static _loadedAssets : {[name : string] : IAsset} = {};
+        private static _loaders: IAssetLoader[] = [];
+        private static _loadedAssets: { [name: string]: IAsset } = {};
 
-        private constructor(){
+        /** Private to enforce static method calls and prevent instantiation. */
+        private constructor() {
         }
 
-        /**
-         * Initialize the assetmanage.
-         */
-        public static initialize() : void{
-
-            // reg image loader
+        /** Initializes this manager. */
+        public static initialize(): void {
             AssetManager._loaders.push(new ImageAssetLoader());
-
-            // reg json loader
             AssetManager._loaders.push(new JsonAssetLoader());
+            AssetManager._loaders.push(new TextAssetLoader());
         }
 
         /**
-         * Register a asset loader.
-         * @param loader 
+         * Registers the provided loader with this asset manager.
+         * @param loader The loader to be registered.
          */
-        public static registerLoader(loader : IAssetLoader) : void{
+        public static registerLoader(loader: IAssetLoader): void {
             AssetManager._loaders.push(loader);
         }
 
         /**
-         *  This method is called When a asset is loaded.
-         * @param asset 
+         * A callback to be made from an asset loader when an asset is loaded.
+         * @param asset
          */
-        public static onAssetLoaded(asset : IAsset) : void{
+        public static onAssetLoaded(asset: IAsset): void {
             AssetManager._loadedAssets[asset.name] = asset;
             Message.send(MESSAGE_ASSET_LOADER_ASSET_LOADED + asset.name, this, asset);
         }
 
         /**
-         * Start Load a asset.
-         * @param assetName 
+         * Attempts to load an asset using a registered asset loader.
+         * @param assetName The name/url of the asset to be loaded.
          */
-        public static loadAsset(assetName : string) : void{
-            let extension = assetName.split('.').pop().toLocaleLowerCase();
-            for(let l of AssetManager._loaders){
-                if(l.supportedExtension.indexOf(extension) !== -1){
-                    l.loadAsset( assetName);
+        public static loadAsset(assetName: string): void {
+            let extension = assetName.split('.').pop().toLowerCase();
+            for (let l of AssetManager._loaders) {
+                if (l.supportedExtensions.indexOf(extension) !== -1) {
+                    l.loadAsset(assetName);
                     return;
                 }
             }
 
-            console.warn("Unable to load asset with extension " + extension + ", because there is no loader associated with it.")
+            console.warn("Unable to load asset with extension " + extension + " because there is no loader associated with it.");
         }
 
         /**
-         * Return If is the given asset is loaded already.
-         * @param assetName 
+         * Indicates if an asset with the provided name has been loaded.
+         * @param assetName The asset name to check.
          */
-        public static isAssetLoaded(assetName : string) : boolean{
+        public static isAssetLoaded(assetName: string): boolean {
             return AssetManager._loadedAssets[assetName] !== undefined;
         }
 
         /**
-         * Gets the asset if loaded or start loading this asset.
-         * @param assetName 
+         * Attempts to get an asset with the provided name. If found, it is returned; otherwise, undefined is returned.
+         * @param assetName The asset name to get.
          */
-        public static getAsset( assetName : string) : IAsset{
-            if(AssetManager._loadedAssets[assetName] !== undefined){
+        public static getAsset(assetName: string): IAsset {
+            if (AssetManager._loadedAssets[assetName] !== undefined) {
                 return AssetManager._loadedAssets[assetName];
             } else {
                 AssetManager.loadAsset(assetName);

@@ -1,9 +1,15 @@
-namespace ZE{
-    
-    export interface IComponentBuilder{
+﻿namespace ZE {
 
+    /** A builder which is used for component creation. */
+    export interface IComponentBuilder {
+
+        /** The type of component. */
         readonly type: string;
 
-        buildFromJson(json : any) : IComponent;
+        /**
+         * Builds a compoent from the provided json.
+         * @param json The json to build from.
+         */
+        buildFromJson( json: any ): IComponent;
     }
 }

@@ -1,18 +1,12 @@
-namespace ZE{
+﻿namespace ZE {
 
-    /**
-     * The asset interface.
-     */
-    export interface IAsset{
-        /**
-         * The asset name.
-         */
-       readonly name : string;
+    /** Represents an asset */
+    export interface IAsset {
 
-       /**
-        * The asset data.
-        */
-       readonly data : any;
+        /** The name of this asset. */
+        readonly name: string;
+
+        /** The data of this asset. */
+        readonly data: any;
     }
-
 }
