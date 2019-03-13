@@ -1,73 +1,106 @@
-/// <reference path="./baseBehavior.ts" />
-/// <reference path="./behaviorManager.ts" />
+﻿/// <reference path="basebehavior.ts" />
+/// <reference path="behaviormanager.ts" />
 
-namespace ZE{
+namespace ZE {
 
-    export class KeyboardMovementBehaviorData implements IBehaviorData{
-        public name : string;
-        public speed : number = 0.1;
+    /**
+     * Represents the data used to configure this behavior.
+     */
+    export class KeyboardMovementBehaviorData implements IBehaviorData {
 
-        public setFromJson(json : any) : void{
+        /**
+         * The name of this behavior.
+         */
+        public name: string;
 
-            if(json.name === undefined){
-                throw new Error("Name must be defined in behavior data.")
+        /**
+         * The movement speed to be applied when a key is held down. Default: 0.1
+         */
+        public speed: number = 0.1;
+
+        /**
+         * Sets the properties of this data from the provided JSON.
+         * @param json The json to set from.
+         */
+        public setFromJson( json: any ): void {
+            if ( json.name === undefined ) {
+                throw new Error( "Name must be defined in behavior data." );
             }
 
-            if(json.speed !== undefined){
-                this.speed = Number(json.speed);
-            }
+            this.name = String( json.name );
 
-            this.name = String(json.name);
+            if ( json.speed !== undefined ) {
+                this.speed = Number( json.speed );
+            }
         }
     }
 
+    /**
+     * The builder for a KeyboardMovement behavior.
+     */
     export class KeyboardMovementBehaviorBuilder implements IBehaviorBuilder {
 
-        public get type(): string{
+        /**
+         * The behavior type.
+         */
+        public get type(): string {
             return "keyboardMovement";
         }
 
-        public buildFromJson(json: any): IBehavior {
+        /**
+         * Builds a behavior from the provided json.
+         * @param json The json to build from.
+         */
+        public buildFromJson( json: any ): IBehavior {
             let data = new KeyboardMovementBehaviorData();
-            data.setFromJson(json);
-            return new KeyboardMovementBehavior(data);
+            data.setFromJson( json );
+            return new KeyboardMovementBehavior( data );
         }
     }
 
+    /**
+     * A behavior which, when a key is held down, moves the object to which it is attached
+     * at the rate of the configured speed.
+     */
     export class KeyboardMovementBehavior extends BaseBehavior {
-        
-        private _roration : Vector3;
-        public speed : number = 0.1;
 
-        public constructor(data : KeyboardMovementBehaviorData){
-            super(data);
+        /**
+         * The speed a which to move.
+         */
+        public speed: number = 0.1; 
+
+        /**
+         * Creates a new KeyboardMovementBehavior.
+         * @param data The data for this behavior.
+         */
+        public constructor( data: KeyboardMovementBehaviorData ) {
+            super( data );
 
             this.speed = data.speed;
         }
 
-        public update(time: number): void {
-            if(InputManager.isKeyDown(Keys.LEFT)){
+        /**
+         * Performs update procedures on this component.
+         * @param time The delta time in milliseconds since the last update.
+         */
+        public update( time: number ): void {
+            if ( InputManager.isKeyDown( Keys.LEFT ) ) {
                 this._owner.transform.position.x -= this.speed;
             }
-
-            if(InputManager.isKeyDown(Keys.RIGHT)){
+            if ( InputManager.isKeyDown( Keys.RIGHT ) ) {
                 this._owner.transform.position.x += this.speed;
             }
-
-            if(InputManager.isKeyDown(Keys.UP)){
+            if ( InputManager.isKeyDown( Keys.UP ) ) {
                 this._owner.transform.position.y -= this.speed;
             }
-
-            if(InputManager.isKeyDown(Keys.DOWN)){
+            if ( InputManager.isKeyDown( Keys.DOWN ) ) {
                 this._owner.transform.position.y += this.speed;
             }
 
-
-            super.update(time);
+            super.update( time );
         }
-
-
     }
 
-    BehaviorManager.registerBuilder(new KeyboardMovementBehaviorBuilder());
+    // Auto-registers the builder.
+    BehaviorManager.registerBuilder( new KeyboardMovementBehaviorBuilder() );
 }

@@ -1,58 +1,77 @@
-/// <reference path="./baseBehavior.ts" />
-/// <reference path="./behaviorManager.ts" />
+﻿/// <reference path="basebehavior.ts" />
+/// <reference path="behaviormanager.ts" />
 
-namespace ZE{
+namespace ZE {
 
-    export class RotationBehaviorData implements IBehaviorData{
-        public name : string;
-        public rotation : Vector3 = Vector3.zero;
+    /**
+     * The data for a rotation behavior.
+     */
+    export class RotationBehaviorData implements IBehaviorData {
 
-        public setFromJson(json : any) : void{
+        /** The name of the behavior. */
+        public name: string;
 
-            if(json.name === undefined){
-                throw new Error("Name must be defined in behavior data.")
+        /** The rotation amounts to be added per update. */
+        public rotation: Vector3 = Vector3.zero;
+
+        /**
+         * Sets the properties of this data from the provided json.
+         * @param json The json to set from.
+         */
+        public setFromJson( json: any ): void {
+            if ( json.name === undefined ) {
+                throw new Error( "Name must be defined in behavior data." );
             }
 
-            this.name = String(json.name);
+            this.name = String( json.name );
 
-            if(json.rotation !== undefined){
-                this.rotation.setFromJson(json.rotation);
+            if ( json.rotation !== undefined ) {
+                this.rotation.setFromJson( json.rotation );
             }
         }
     }
 
+    /** The builder for a rotation behavior. */
     export class RotationBehaviorBuilder implements IBehaviorBuilder {
-
-        public get type(): string{
+        public get type(): string {
             return "rotation";
         }
 
-        public buildFromJson(json: any): IBehavior {
+        public buildFromJson( json: any ): IBehavior {
             let data = new RotationBehaviorData();
-            data.setFromJson(json);
-            return new RotationBehavior(data);
+            data.setFromJson( json );
+            return new RotationBehavior( data );
         }
     }
 
+    /**
+     * A behavior which continuously rotates the object to which it is attached by the
+     * configured amount.
+     */
     export class RotationBehavior extends BaseBehavior {
-        
-        private _roration : Vector3;
 
-        public constructor(data : RotationBehaviorData){
-            super(data);
+        private _rotation: Vector3;
 
+        /**
+         * Creates a new RotationBehavior.
+         * @param data The data for this behavior.
+         */
+        public constructor( data: RotationBehaviorData ) {
+            super( data );
 
-            this._roration = data.rotation;
+            this._rotation = data.rotation;
         }
 
-        public update(time: number): void {
-            this._owner.transform.rotation.add(this._roration);
+        /**
+         * Performs update procedures on this behavior.
+         * @param time The time in milliseconds since the last update.
+         */
+        public update( time: number ): void {
+            this._owner.transform.rotation.add( this._rotation );
 
-            super.update(time);
+            super.update( time );
         }
-
-
     }
 
-    BehaviorManager.registerBuilder(new RotationBehaviorBuilder());
+    BehaviorManager.registerBuilder( new RotationBehaviorBuilder() );
 }

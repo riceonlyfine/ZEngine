@@ -1,85 +1,68 @@
-namespace ZE{
+﻿namespace ZE {
 
-    export class SoundEffect{
+    /**
+     * Manages various aspects of audio output.
+     */
+    export class AudioManager {
 
-        public assetPath : string;
-        private _player : HTMLAudioElement;
+        private static _soundEffects: { [name: string]: SoundEffect } = {};
 
-        public constructor(assetPath : string, loop : boolean){
-            this._player = new Audio(assetPath);
-            this._player.loop = loop;
+        /**
+         * Loads a sound file and creates a sound effect, registering it with this manager.
+         * @param name The name of the sound effect to be loaded.
+         * @param assetPath The path of the sound file to load.
+         * @param loop Indicates if the effect should loop.
+         */
+        public static loadSoundFile( name: string, assetPath: string, loop: boolean ): void {
+            AudioManager._soundEffects[name] = new SoundEffect( assetPath, loop );
         }
 
-        public get loop() : boolean{
-            return this._player.loop;
-        }
-
-        public set loop(value : boolean){
-           this._player.loop = value;
-        }
-
-
-        public destroy() : void{
-            this._player = undefined;
-        }
-
-        public play(): void{
-            if(!this._player.paused){
-                this.stop();
-            }
-            this._player.play();
-        }
-
-        public pause() : void{
-            this._player.pause();
-        }
-
-        public stop() : void{
-            this._player.pause();
-            this._player.currentTime = 0;
-        }
-    }
-
-    export class AudioManager{
-
-        private static _soundEffects : {[name : string] : SoundEffect} = {};
-
-        public static loadSoundFile(name : string, assetPath : string, loop : boolean) : void{
-            AudioManager._soundEffects[name] = new SoundEffect(assetPath, loop);
-        }
-
-        public static playSound(name : string) : void{
-            if(AudioManager._soundEffects[name] !== undefined){
+        /**
+         * Plays a sound effect with the given name.
+         * @param name The name of the sound to be played.
+         */
+        public static playSound( name: string ): void {
+            if ( AudioManager._soundEffects[name] !== undefined ) {
                 AudioManager._soundEffects[name].play();
             }
         }
 
-        public static stopSound(name : string) : void{
-            if(AudioManager._soundEffects[name] !== undefined){
-                AudioManager._soundEffects[name].stop();
-            }
-        }
-
-        public static pauseSound(name : string) : void{
-            if(AudioManager._soundEffects[name] !== undefined){
+        /**
+         * Pauses a sound effect with the given name.
+         * @param name The name of the sound to be paused.
+         */
+        public static pauseSound( name: string ): void {
+            if ( AudioManager._soundEffects[name] !== undefined ) {
                 AudioManager._soundEffects[name].pause();
             }
         }
 
-        public static pauseAll(name : string) : void{
-
-            for (let sfx in AudioManager._soundEffects){
+        /**
+         * Pauses all sound effects.
+         */
+        public static pauseAll(): void {
+            for ( let sfx in AudioManager._soundEffects ) {
                 AudioManager._soundEffects[sfx].pause();
             }
         }
 
-        public static stopAll(name : string) : void{
+        /**
+         * Stops a sound effect with the given name.
+         * @param name The name of the sound to be stopped.
+         */
+        public static stopSound( name: string ): void {
+            if ( AudioManager._soundEffects[name] !== undefined ) {
+                AudioManager._soundEffects[name].stop();
+            }
+        }
 
-            for (let sfx in AudioManager._soundEffects){
+        /**
+         * Stops all sound effects.
+         */
+        public static stopAll(): void {
+            for ( let sfx in AudioManager._soundEffects ) {
                 AudioManager._soundEffects[sfx].stop();
             }
         }
     }
-
-
 }

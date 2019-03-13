@@ -1,6 +1,8 @@
-namespace ZE{
-    export interface IComponnetData {
-        name : string;
-        setFromJson(json : any) : void;
+﻿namespace ZE {
+
+    export interface IComponentData {
+        name: string;
+
+        setFromJson( json: any ): void;
     }
 }

@@ -1,29 +1,57 @@
-namespace ZE{
+﻿namespace ZE {
 
-    export abstract class BaseBehavior implements IBehavior{
-       
-       
-        public name : string;
-        private _data : IBehaviorData;
-        protected _owner : SimObject;
+    /**
+     * The base behavior type from which all behaviors should inherit.
+     * This class cannot be instatiated directly.
+     */
+    export abstract class BaseBehavior implements IBehavior {
+        public name: string;
 
-        public constructor(data : IBehaviorData){
+        /**
+         * The data associated with this behavior.
+         */
+        protected _data: IBehaviorData;
+
+        /**
+         * The owning entity of this behavior.
+         */
+        protected _owner: TEntity;
+
+        /**
+         * Creates a new base behavior.
+         * @param data The data to be used when creating this object.
+         */
+        public constructor( data: IBehaviorData ) {
             this._data = data;
-            this.name = data.name;
+            this.name = this._data.name;
         }
 
-        public setOwner(owner: SimObject): void {
+        /**
+         * Sets the owner entity.
+         * @param owner The owner.
+         */
+        public setOwner( owner: TEntity ): void {
             this._owner = owner;
         }
 
-        public update(time: number): void {
-            
+        /**
+         * Performs pre-update procedures on this behavior.
+         */
+        public updateReady(): void {
         }
 
-        public apply(userData: any): void {
-            
+        /**
+         * Performs update procedures on this behavior.
+         * @param time The delta time in milliseconds since the last update.
+         */
+        public update( time: number ): void {
         }
 
-        
+        /**
+         * Applys this behavior with the given user data.
+         * @param userData The user data to be applied.
+         */
+        public apply( userData: any ): void {
+        }
     }
 }

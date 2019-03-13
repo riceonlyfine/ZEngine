@@ -1,35 +1,59 @@
-namespace ZE{
+﻿namespace ZE {
 
-    export abstract class BaseComponent implements IComponent{
 
-        protected _owner : SimObject;
-        protected _data : IComponnetData;
+    export abstract class BaseComponent implements IComponent {
 
-        public name : string;
+        /** The owning entity. */
+        protected _owner: TEntity;
+        protected _data: IComponentData;
 
-        public constructor(data : IComponnetData){
+        /**
+         * The name of this component.
+         */
+        public name: string;
+
+        /**
+         * Creates a new BaseComponent.
+         * @param data The data for this component.
+         */
+        public constructor( data: IComponentData ) {
             this._data = data;
             this.name = data.name;
         }
 
-        public load() : void{
-            
-        }
-
-        public setOwner(owner : SimObject) : void{
-            this._owner = owner;
-        }
-
-        public get owner() : SimObject{
+        /** The owning entity. */
+        public get owner(): TEntity {
             return this._owner;
         }
 
-        public update(time : number) : void {
-
+        /**
+         * Sets the owner of this component.
+         * @param owner The owner to be set.
+         */
+        public setOwner( owner: TEntity ): void {
+            this._owner = owner;
         }
-        
-        public render(shader : Shader) : void{
 
+        /** Loads this component. */
+        public load(): void {
+        }
+
+        /** Performs pre-update procedures on this component. */
+        public updateReady(): void {
+        }
+
+        /**
+         * Updates this component.
+         * @param time The amount of time in milliseconds since the last update.
+         */
+        public update( time: number ): void {
+        }
+
+        /**
+         * Renders this component.
+         * @param shader The shader to use for rendering.
+         */
+        public render( shader: Shader ): void {
         }
     }
 }
