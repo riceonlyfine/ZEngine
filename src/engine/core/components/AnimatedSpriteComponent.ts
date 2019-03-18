@@ -24,7 +24,7 @@ namespace ZE {
         /** Indicates if this component should play automatically on load. */
         public autoPlay: boolean = true;
 
-        /** THe amount of time in milliseconds that each frame should take to play. */
+        /** The amount of time in milliseconds that each frame should take to play. */
         public frameTime: number = 33;
 
         public setFromJson( json: any ): void {
