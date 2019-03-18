@@ -4,7 +4,7 @@
     export abstract class BaseComponent implements IComponent {
 
         /** The owning entity. */
-        protected _owner: TEntity;
+        protected _owner: Node;
         protected _data: IComponentData;
 
         /**
@@ -22,7 +22,7 @@
         }
 
         /** The owning entity. */
-        public get owner(): TEntity {
+        public get owner(): Node {
             return this._owner;
         }
 
@@ -30,7 +30,7 @@
          * Sets the owner of this component.
          * @param owner The owner to be set.
          */
-        public setOwner( owner: TEntity ): void {
+        public setOwner( owner: Node ): void {
             this._owner = owner;
         }
 

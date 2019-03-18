@@ -3,14 +3,14 @@
 namespace ZE {
 
     /**
-     * Represents a single entity in the world. TEntities themselves do not get rendered or have behaviors.
-     * The do, however, have transforms and may have child TEntities. Components and behaviors may be
-     * attached to TEntities to decorate functionality.
+     * Represents a single node in the world. Node themselves do not get rendered or have behaviors.
+     * The do, however, have transforms and may have child nodes. Components and behaviors may be
+     * attached to node to decorate functionality.
      */
-    export class TEntity extends TObject {
+    export class Node extends TObject {
 
-        private _children: TEntity[] = [];
-        private _parent: TEntity;
+        private _children: Node[] = [];
+        private _parent: Node;
         private _isLoaded: boolean = false;
         private _sceneGraph: SceneGraph;
         private _components: IComponent[] = [];
@@ -23,13 +23,13 @@ namespace ZE {
         /** The name of this object. */
         public name: string;
 
-        /** The transform of this entity. */
+        /** The transform of this node. */
         public transform: Transform = new Transform();
 
         /**
-         * Creates a new entity.
-         * @param name The name of this entity.
-         * @param sceneGraph The scenegraph to which this entity belongs.
+         * Creates a new node.
+         * @param name The name of this node.
+         * @param sceneGraph The scenegraph to which this node belongs.
          */
         public constructor( name: string, sceneGraph?: SceneGraph ) {
             super();
@@ -37,47 +37,47 @@ namespace ZE {
             this._sceneGraph = sceneGraph;
         }
 
-        /** Returns the parent of this entity. */
-        public get parent(): TEntity {
+        /** Returns the parent of this node. */
+        public get parent(): Node {
             return this._parent;
         }
 
-        /** Returns the world transformation matrix of this entity. */
+        /** Returns the world transformation matrix of this node. */
         public get worldMatrix(): Matrix4x4 {
             return this._worldMatrix;
         }
 
-        /** Indicates if this entity has been loaded. */
+        /** Indicates if this node has been loaded. */
         public get isLoaded(): boolean {
             return this._isLoaded;
         }
 
-        /** Indicates if this entity is currently visible. */
+        /** Indicates if this node is currently visible. */
         public get isVisible(): boolean {
             return this._isVisible;
         }
 
-        /** Sets visibility of this entity. */
+        /** Sets visibility of this node. */
         public set isVisible( value: boolean ) {
             this._isVisible = value;
         }
 
         /**
-         * Adds the provided entity as a child of this one.
+         * Adds the provided node as a child of this one.
          * @param child The child to be added.
          */
-        public addChild( child: TEntity ): void {
+        public addChild( child: Node ): void {
             child._parent = this;
             this._children.push( child );
             child.onAdded( this._sceneGraph );
         }
 
         /**
-         * Attempts to remove the provided entity as a child of this one, if it is in fact 
-         * a child of this entity. Otherwise, nothing happens.
+         * Attempts to remove the provided node as a child of this one, if it is in fact 
+         * a child of this node. Otherwise, nothing happens.
          * @param child The child to be added.
          */
-        public removeChild( child: TEntity ): void {
+        public removeChild( child: Node ): void {
             let index = this._children.indexOf( child );
             if ( index !== -1 ) {
                 child._parent = undefined;
@@ -86,7 +86,7 @@ namespace ZE {
         }
 
         /**
-         * Recursively attempts to retrieve a component with the given name from this entity or its children.
+         * Recursively attempts to retrieve a component with the given name from this node or its children.
          * @param name The name of the component to retrieve.
          */
         public getComponentByName( name: string ): IComponent {
@@ -107,7 +107,7 @@ namespace ZE {
         }
 
         /**
-        * Recursively attempts to retrieve a behavior with the given name from this entity or its children.
+        * Recursively attempts to retrieve a behavior with the given name from this node or its children.
         * @param name The name of the behavior to retrieve.
         */
         public getBehaviorByName( name: string ): IBehavior {
@@ -128,16 +128,16 @@ namespace ZE {
         }
 
         /**
-        * Recursively attempts to retrieve a child entity with the given name from this entity or its children.
-        * @param name The name of the entity to retrieve.
+        * Recursively attempts to retrieve a child node with the given name from this node or its children.
+        * @param name The name of the node to retrieve.
         */
-        public getEntityByName( name: string ): TEntity {
+        public getNodeByName( name: string ): Node {
             if ( this.name === name ) {
                 return this;
             }
 
             for ( let child of this._children ) {
-                let result = child.getEntityByName( name );
+                let result = child.getNodeByName( name );
                 if ( result !== undefined ) {
                     return result;
                 }
@@ -147,7 +147,7 @@ namespace ZE {
         }
 
         /**
-         * Adds the given component to this entity.
+         * Adds the given component to this node.
          * @param component The component to be added.
          */
         public addComponent( component: IComponent ): void {
@@ -156,7 +156,7 @@ namespace ZE {
         }
 
         /**
-         * Adds the given behavior to this entity.
+         * Adds the given behavior to this node.
          * @param behavior The behavior to be added.
          */
         public addBehavior( behavior: IBehavior ): void {
@@ -164,7 +164,7 @@ namespace ZE {
             behavior.setOwner( this );
         }
 
-        /** Performs loading procedures on this entity. */
+        /** Performs loading procedures on this node. */
         public load(): void {
             this._isLoaded = true;
 
@@ -177,7 +177,7 @@ namespace ZE {
             }
         }
 
-        /** Performs pre-update procedures on this entity. */
+        /** Performs pre-update procedures on this node. */
         public updateReady(): void {
             for ( let c of this._components ) {
                 c.updateReady();
@@ -193,7 +193,7 @@ namespace ZE {
         }
 
         /**
-         * Performs update procedures on this entity (recurses through children, 
+         * Performs update procedures on this node (recurses through children, 
          * components and behaviors as well).
          * @param time The delta time in milliseconds since the last update call.
          */
@@ -216,7 +216,7 @@ namespace ZE {
         }
 
         /**
-         * Renders this entity and its children.
+         * Renders this node and its children.
          * @param shader The shader to use when rendering/
          */
         public render( shader: Shader ): void {
@@ -233,14 +233,14 @@ namespace ZE {
             }
         }
 
-        /** Returns the world position of this entity. */
+        /** Returns the world position of this node. */
         public getWorldPosition(): Vector3 {
             return new Vector3( this._worldMatrix.data[12], this._worldMatrix.data[13], this._worldMatrix.data[14] );
         }
 
         /**
-         * Called when this entity is added to a scene graph.
-         * @param sceneGraph The scenegraph to which this entity was added.
+         * Called when this node is added to a scene graph.
+         * @param sceneGraph The scenegraph to which this node was added.
          */
         protected onAdded( sceneGraph: SceneGraph ): void {
             this._sceneGraph = sceneGraph;

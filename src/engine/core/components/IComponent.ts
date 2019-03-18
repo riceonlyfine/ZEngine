@@ -12,13 +12,13 @@
         name: string;
 
         /** The owning entity. */
-        readonly owner: TEntity;
+        readonly owner: Node;
 
         /**
          * Sets the owner of this component.
          * @param owner The owner to be set.
          */
-        setOwner( owner: TEntity ): void;
+        setOwner( owner: Node ): void;
 
         /** Performs pre-update procedures on this component. */
         updateReady(): void;

@@ -14,7 +14,7 @@
          * Sets the owner of this behavior.
          * @param owner The owner.
          */
-        setOwner( owner: TEntity ): void;
+        setOwner( owner: Node ): void;
 
         /**
          * Performs pre-update procedures on this behavior.

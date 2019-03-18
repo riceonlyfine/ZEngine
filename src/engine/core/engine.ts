@@ -12,7 +12,6 @@
         private _isFirstUpdate: boolean = true;
 
         private _renderer: Renderer;
-        private _game: IGame;
 
         /**
          * Creates a new engine.
@@ -29,9 +28,7 @@
          * @param game The object containing game-specific logic.
          * @param elementName The name (id) of the HTML element to use as the viewport. Must be the id of a canvas element.
          * */
-        public start( game: IGame, elementName?: string ): void {
-
-            this._game = game;
+        public start(elementName?: string ): void {
 
             let rendererViewportCreateInfo: RendererViewportCreateInfo = new RendererViewportCreateInfo();
             rendererViewportCreateInfo.elementId = elementName;
@@ -57,7 +54,7 @@
             BitmapFontManager.load();
 
             // Load level config
-            LevelManager.load();
+            ScenelManager.load();
 
             // Load material configs
             MaterialManager.load();
@@ -110,13 +107,13 @@
                 return;
             }
 
-            if ( !LevelManager.isLoaded ) {
+            if ( !ScenelManager.isLoaded ) {
                 requestAnimationFrame( this.preloading.bind( this ) );
                 return;
             }
 
             // Perform items such as loading the first/initial level, etc.
-            this._game.updateReady();
+            // this._game.updateReady();
 
             // Kick off the render loop.
             this.loop();
@@ -126,10 +123,10 @@
             let delta = performance.now() - this._previousTime;
 
             MessageBus.update( delta );
-            LevelManager.update( delta );
+            ScenelManager.update( delta );
             CollisionManager.update( delta );
 
-            this._game.update( delta );
+            // this._game.update( delta );
 
             this._previousTime = performance.now();
         }
@@ -137,9 +134,9 @@
         private render(): void {
             this._renderer.BeginRender();
 
-            LevelManager.render( this._renderer.worldShader );
+            ScenelManager.render( this._renderer.worldShader );
 
-            this._game.render( this._renderer.worldShader );
+            // this._game.render( this._renderer.worldShader );
 
             this._renderer.EndRender();
         }

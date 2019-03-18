@@ -6,15 +6,15 @@
      */
     export class SceneGraph {
 
-        private _root: TEntity;
+        private _root: Node;
 
         /** Creates a new SceneGraph */
         public constructor() {
-            this._root = new TEntity( "__ROOT__", this );
+            this._root = new Node( "__ROOT__", this );
         }
 
         /** Returns the root object. */
-        public get root(): TEntity {
+        public get root(): Node {
             return this._root;
         }
 
@@ -27,7 +27,7 @@
          * Adds an entity to the root entity of this scene graph.
          * @param entity The entity to be added.
          */
-        public addObject( entity: TEntity ): void {
+        public addObject( entity: Node ): void {
             this._root.addChild( entity );
         }
 
@@ -35,8 +35,8 @@
          * Recursively searches this scene graph for an entity with the provided name.
          * @param name The name of the entity to retrieve.
          */
-        public getEntityByName( name: string ): TEntity {
-            return this._root.getEntityByName( name );
+        public getEntityByName( name: string ): Node {
+            return this._root.getNodeByName( name );
         }
 
         /** Loads this scene graph. */

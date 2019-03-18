@@ -15,7 +15,7 @@
         /**
          * The owning entity of this behavior.
          */
-        protected _owner: TEntity;
+        protected _owner: Node;
 
         /**
          * Creates a new base behavior.
@@ -30,7 +30,7 @@
          * Sets the owner entity.
          * @param owner The owner.
          */
-        public setOwner( owner: TEntity ): void {
+        public setOwner( owner: Node ): void {
             this._owner = owner;
         }
 

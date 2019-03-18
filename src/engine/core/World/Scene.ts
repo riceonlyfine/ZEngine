@@ -21,7 +21,7 @@
      * progresses through the game. An open world would be achieved by overriding this class
      * and adding/removing objects dynamically based on player position, etc.
      */
-    export class Level {
+    export class Scene {
 
         private _name: string;
         private _description: string;
@@ -119,14 +119,14 @@
          * @param dataSection The data section to load from.
          * @param parent The parent object to attach to.
          */
-        private loadEntity( dataSection: any, parent: TEntity ): void {
+        private loadEntity( dataSection: any, parent: Node ): void {
 
             let name: string;
             if ( dataSection.name !== undefined ) {
                 name = String( dataSection.name );
             }
 
-            let entity = new TEntity( name, this._sceneGraph );
+            let entity = new Node( name, this._sceneGraph );
 
             if ( dataSection.transform !== undefined ) {
                 entity.transform.setFromJson( dataSection.transform );
